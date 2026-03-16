@@ -1,0 +1,16 @@
+# Python 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+env/
+venv/
+.conda/
+
+# 访问日志
+logs/*.log
+
+# 系统级文件
+.DS_Store
+Thumbs.db
