@@ -124,6 +124,8 @@ class WebServer:
                 client_socket.sendall(response_data)
                 logger.info(f"ACCESS client={client_address[0]} url={url_display} status=400")
 
+        except socket.timeout:
+            logger.debug(f"客户端 {client_address} 连接超时 (通常是浏览器的空闲预连接)")
         except ConnectionResetError:
             logger.warning(f"客户端 {client_address} 强制断开了连接")
         except Exception as e:
