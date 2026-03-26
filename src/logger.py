@@ -11,7 +11,7 @@ def setup_logger(name="WebServerLogger"):
     
     # 防止重复添加 Handler 导致日志重复打印
     if not logger.handlers:
-        logger.setLevel(logging.DEBUG) # 设置最低日志级别为 DEBUG
+        logger.setLevel(logging.INFO) # 设置最低日志级别为 DEBUG
         
         # 定义日志输出格式：[时间] [线程名] [级别] 日志内容
         # 这种格式对于多线程课设程序的调试和展示极其重要
@@ -21,7 +21,7 @@ def setup_logger(name="WebServerLogger"):
         )
         
         console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setLevel(logging.DEBUG)
+        console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         
         logger.addHandler(console_handler)

@@ -44,7 +44,7 @@ class WebServer:
             while self.is_running:
                 try:
                     client_socket, client_address = self.server_socket.accept()
-                    logger.info(f"接收到来自 {client_address} 的连接")
+                    logger.debug(f"接收到来自 {client_address} 的连接")
                     
                     # 【核心要求】：每当接收到一个新连接，创建一个独立线程处理
                     client_thread = threading.Thread(
@@ -113,9 +113,7 @@ class WebServer:
                 
                 # 4. 将响应数据通过 Socket 发送回客户端
                 client_socket.sendall(response_data)
-                logger.info(
-                    f"ACCESS client={client_address[0]} url={parsed_req.url} status={status_code}"
-                )
+                logger.info(f"{client_address[0]} - {parsed_req.method} {parsed_req.url} - {status_code}")
             else:
                 url_display = parsed_req.url if parsed_req.url else "-"
                 logger.warning(f"接收到无效的 HTTP 请求来自 {client_address}: {url_display}")

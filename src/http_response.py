@@ -88,7 +88,7 @@ def handle_request(method: str, url: str):
         with open(local_path, 'rb') as f: # 必须以 'rb' 二进制模式读取，才能兼容图片和视频
             content = f.read()
             mime_type = get_mime_type(local_path)
-            logger.info(f"200 OK: 成功读取文件 {local_path} ({mime_type})")
+            logger.debug(f"成功读取本地文件: {local_path} ({mime_type})")
             response = build_http_response(200, content, mime_type)
             return 200, response
             
