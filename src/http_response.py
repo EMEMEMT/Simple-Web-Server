@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from src.config import WEB_ROOT, HTTP_VERSION, SERVER_NAME, STATUS_CODES, MIME_TYPES
 from src.logger import logger
+import time
 
 def get_mime_type(file_path: str) -> str:
     """根据文件后缀获取 MIME 类型"""
@@ -50,6 +51,8 @@ def handle_request(method: str, url: str):
     :param url: 请求的路径 (如 /index.html)
     :return: (status_code, response_bytes)
     """
+
+    # time.sleep(2) # 模拟服务器处理请求的耗时，方便测试并发性能和日志输出的正确性
     # NOTE:
     # 为了让上层能够在访问日志中打印响应状态码，这里返回 (status_code, response_bytes)
     # 而不是只返回 bytes。
