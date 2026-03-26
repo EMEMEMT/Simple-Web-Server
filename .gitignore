@@ -11,8 +11,10 @@ venv/
 # 访问日志
 logs/*.log
 
-webroot/*.png
-webroot/*.mp4
+*.png
+*.mp4
+*.jpg
+*.gif
 
 # 系统级文件
 .DS_Store
