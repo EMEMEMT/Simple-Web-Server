@@ -21,14 +21,13 @@
 
     <div class="container">
         <h2>多视频切换播放测试</h2>
-        <p>选择不同的视频文件进行请求。你的服务器以 <code>rb</code> 模式读取二进制流，完全支持视频的平滑切换与播放。</p>
+        <p>选择不同的视频文件进行请求。服务器以 <code>rb</code> 模式读取二进制流，完全支持视频的平滑切换与播放。</p>
         
         <div class="media-box">
             <div class="control-panel">
                 <select id="videoSelector">
-                    <option value="test.mp4">测试视频 1 (test.mp4)</option>
-                    <option value="course.mp4">课程录像片段 (course.mp4)</option>
-                    <option value="demo.webm">WebM格式视频 (demo.webm)</option>
+                    <option value="test1.mp4">测试视频 1 (test1.mp4)</option>
+                    <option value="test2.mp4">测试视频 2 (test2.mp4)</option>
                 </select>
                 <button type="button" onclick="loadVideo()">加载并播放</button>
             </div>
@@ -51,19 +50,16 @@
             var source = document.getElementById('videoSource');
             var status = document.getElementById('statusText');
 
-            // 更改 source 的 src
             source.src = selectedFile;
             
-            // 如果视频格式不同，最好也动态修改 type
             if(selectedFile.endsWith('.webm')) {
                 source.type = 'video/webm';
             } else {
                 source.type = 'video/mp4';
             }
 
-            // 视频元素必须调用 load() 方法才能重新发起 HTTP 请求获取新视频
             video.load();
-            video.play(); // 可选：加载后自动播放
+            video.play(); 
             
             status.innerText = "当前请求: GET /" + selectedFile;
         }
