@@ -98,14 +98,7 @@ def plot_results(global_start_time):
     ax.grid(axis='x', linestyle='--', alpha=0.5)
     
     plt.tight_layout()
-    plt.savefig('concurrency_test.png', dpi=300, bbox_inches='tight')
-    print("\n✅ 图表已成功生成！请在当前目录下查看文件：concurrency_test.png")
-    
-    # 2. 依然尝试弹出窗口（如果环境不支持，也不会报错）
-    try:
-        plt.show()
-    except Exception:
-        pass
+    plt.show()
 
 if __name__ == '__main__':
     run_test()

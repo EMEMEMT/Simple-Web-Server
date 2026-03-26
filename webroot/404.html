@@ -1,64 +1,55 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>404 Not Found</title>
-  <style>
-    body{
-      margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      background:#0f172a;
-      color:#e2e8f0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:100vh;
-    }
-    .card{
-      width:min(720px, 92vw);
-      background:#111827;
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:16px;
-      padding:32px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
-    }
-    h1{
-      margin:0 0 10px 0;
-      font-size:56px;
-      line-height:1;
-      color:#f97316;
-    }
-    p{
-      margin:0 0 20px 0;
-      color:#cbd5e1;
-      font-size:16px;
-    }
-    .meta{
-      margin-top:18px;
-      padding-top:18px;
-      border-top:1px solid rgba(255,255,255,0.08);
-      font-size:14px;
-      color:#94a3b8;
-    }
-    a{
-      display:inline-block;
-      margin-top:12px;
-      color:#60a5fa;
-      text-decoration:none;
-    }
-    a:hover{ text-decoration:underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found - Simple Web Server</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 仅在404页面局部使用的微调样式，保持整体风格一致 */
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .error-code {
+            font-size: 80px;
+            color: #e74c3c; /* 使用柔和的红色作为警示 */
+            margin: 0;
+            line-height: 1;
+        }
+        .error-desc {
+            font-size: 18px;
+            color: #7f8fa6;
+            margin-bottom: 30px;
+        }
+        .meta-info {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #dcdde1;
+            color: #a4b0be;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h1>404</h1>
-    <p>The page you requested could not be found. Please check the URL and try again.</p>
-    <a href="/index.html">Return to Home</a>
-    <div class="meta">
-      <div>HTTP Status: 404 Not Found</div>
-      <div>Tip: Try requesting <code>/index.html</code></div>
+    <div class="navbar">
+        <a href="index.html">首页</a>
+        <a href="text.html">文本测试</a>
+        <a href="image.html">图片测试</a>
+        <a href="video.html">视频测试</a>
     </div>
-  </div>
+
+    <div class="container error-container">
+        <h1 class="error-code">404</h1>
+        <h2>页面未找到 (Not Found)</h2>
+        <p class="error-desc">抱歉，服务器上不存在你请求的资源。<br>请检查 URL 是否拼写正确，或者该文件是否位于 webroot 目录下。</p>
+        
+        <a href="index.html" class="nav-btn" style="display: inline-block; width: auto; padding: 12px 30px;">← 返回首页</a>
+
+        <div class="meta-info">
+            <div>HTTP Status: 404 Not Found</div>
+            <div>Tip: 请尝试访问 <code>/index.html</code></div>
+        </div>
+    </div>
 </body>
 </html>
