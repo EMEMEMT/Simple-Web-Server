@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <title>文本与静态资源测试</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .test-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid #dcdde1; }
+        .post-input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #dcdde1; border-radius: 4px; font-size: 14px; }
+        .post-btn { padding: 10px 20px; background-color: #e67e22; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: bold; }
+        .post-btn:hover { background-color: #d35400; }
+        
+        /* 修改了这里的 response-box 样式，使其变为浅色主题 */
+        .response-box { 
+            margin-top: 15px; 
+            padding: 15px; 
+            background: #f8f9fa; /* 改为浅灰色背景 */
+            color: #2f3640;      /* 改为深色文字 */
+            border: 1px dashed #dcdde1; /* 增加与上方媒体框一致的虚线边框 */
+            border-radius: 6px; 
+            display: none; 
+            font-family: Consolas, monospace; 
+            white-space: pre-wrap; 
+            word-wrap: break-word; 
+        }
+        .status-501 { color: #e74c3c; font-weight: bold; font-size: 18px; }
+    </style>
 </head>
 <body>
     <div class="navbar">
@@ -14,8 +35,8 @@
     </div>
 
     <div class="container">
-        <h2>静态文本与资源排版</h2>
-        <p>如果正常显示这个界面，说明服务器成功处理了 <code>GET /text.html</code> 请求，并返回了状态码 <code>200 OK</code>。</p>
+        <h2>静态文本与功能测试</h2>
+        <p>如果能正常显示这个页面，说明服务器成功处理了 <code>GET /text.html</code> 请求，并返回了状态码 <code>200 OK</code>。</p>
         
         <h3>样式表加载测试</h3>
         <p>本页面的字体、颜色、间距均由外部的 <code>style.css</code> 控制。服务器在解析到该请求时，应正确识别其后缀并返回 <code>text/css</code> 的 Content-Type。</p>
@@ -23,11 +44,50 @@
         <h3>列表渲染测试</h3>
         <ul>
             <li>支持 HTML5 标准标签。</li>
-            <li>支持多级目录路由请求。</li>
-            <li>处理文本时能正确识别 UTF-8 编码，不出现乱码。</li>
         </ul>
+
+        <div class="test-section">
+            <h3>非 GET 请求测试 (POST -> 501)</h3>
+            <p>根据任务书要求，服务器目前仅支持 GET 方法。在此处发送 POST 请求，测试服务器是否能正确拦截并返回 <code>501 Not Implemented</code>。</p>
+            
+            <div class="media-box" style="text-align: left;">
+                <label for="postData" style="display:block; margin-bottom: 10px; font-weight: bold; color: #2f3640;">输入要通过 POST 发送的数据：</label>
+                <input type="text" id="postData" class="post-input" value="这是一个POST测试请求。">
+                
+                <button type="button" class="post-btn" onclick="sendPostRequest()">发送 POST 请求</button>
+                
+                <div id="postResponse" class="response-box"></div>
+            </div>
+        </div>
 
         <a href="index.html" class="back-link">← 返回首页</a>
     </div>
+
+    <script>
+        function sendPostRequest() {
+            var data = document.getElementById('postData').value;
+            var responseBox = document.getElementById('postResponse');
+            
+            responseBox.style.display = 'block';
+            responseBox.innerHTML = "正在发送请求至 /api/test_post ...\n";
+
+            fetch('/api/test_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: data
+            })
+            .then(response => {
+                response.text().then(text => {
+                    var statusHtml = "<span class='status-501'>" + response.status + " " + response.statusText + "</span>";
+                    responseBox.innerHTML = "HTTP状态码: " + statusHtml + "\n\n服务器返回的响应体:\n" + text;
+                });
+            })
+            .catch(err => {
+                responseBox.innerHTML = "请求失败 (请检查服务器是否运行): " + err;
+            });
+        }
+    </script>
 </body>
 </html>
