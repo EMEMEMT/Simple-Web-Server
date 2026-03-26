@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图片传输测试</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .control-panel { margin-bottom: 20px; }
+        select { padding: 8px; font-size: 14px; border-radius: 4px; border: 1px solid #dcdde1; }
+        button { padding: 8px 15px; background-color: #00a8ff; color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: #0097e6; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">首页</a>
+        <a href="text.html">文本测试</a>
+        <a href="image.html">图片测试</a>
+        <a href="video.html">视频测试</a>
+    </div>
+
+    <div class="container">
+        <h2>多图片选择传输测试</h2>
+        <p>请在下方选择你想请求的图片。由于服务器通过 MIME 类型字典识别文件，你可以测试 <code>.png</code>、<code>.jpg</code> 或 <code>.gif</code> 等不同格式。</p>
+        
+        <div class="media-box">
+            <div class="control-panel">
+                <select id="imageSelector">
+                    <option value="logo.png">默认 Logo (logo.png)</option>
+                    <option value="photo.jpg">高清照片 (photo.jpg)</option>
+                    <option value="test.gif">动态图 (test.gif)</option>
+                    <option value="not_exist.png">测试不存在的图片 (触发404)</option>
+                </select>
+                <button type="button" onclick="loadImage()">发起 GET 请求</button>
+            </div>
+            
+            <img id="displayImg" alt="点击上方按钮加载图片" style="display:none;">
+            <p id="statusText" style="color: #7f8fa6; font-size: 14px; margin-top: 10px;">等待请求...</p>
+        </div>
+
+        <a href="index.html" class="back-link">← 返回首页</a>
+    </div>
+
+    <script>
+        function loadImage() {
+            var selector = document.getElementById('imageSelector');
+            var selectedFile = selector.value;
+            var img = document.getElementById('displayImg');
+            var status = document.getElementById('statusText');
+
+            // 动态修改 src，浏览器会自动向服务器发送新的 GET 请求
+            img.src = selectedFile;
+            img.style.display = 'inline-block';
+            status.innerText = "当前请求: GET /" + selectedFile;
+        }
+    </script>
+</body>
+</html>

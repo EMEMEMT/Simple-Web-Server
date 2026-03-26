@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文本与静态资源测试</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">首页</a>
+        <a href="text.html">文本测试</a>
+        <a href="image.html">图片测试</a>
+        <a href="video.html">视频测试</a>
+    </div>
+
+    <div class="container">
+        <h2>静态文本与资源排版</h2>
+        <p>如果你能正常看到这个页面，说明服务器成功处理了 <code>GET /text.html</code> 请求，并返回了状态码 <code>200 OK</code>。</p>
+        
+        <h3>1. 样式表加载测试</h3>
+        <p>本页面的字体、颜色、间距均由外部的 <code>style.css</code> 控制。服务器在解析到该请求时，应正确识别其后缀并返回 <code>text/css</code> 的 Content-Type。</p>
+
+        <h3>2. 列表渲染测试</h3>
+        <ul>
+            <li>支持 HTML5 标准标签。</li>
+            <li>支持多级目录路由请求。</li>
+            <li>处理文本时能正确识别 UTF-8 编码，不出现乱码。</li>
+        </ul>
+
+        <a href="index.html" class="back-link">← 返回首页</a>
+    </div>
+</body>
+</html>

@@ -20,7 +20,7 @@ def main():
     print("  欢迎使用 Simple Web Server (计算机网络课设)  ")
     print("="*50)
     
-    # 实例化并运行 GUI 主循环
+    # 实例化并运行原单界面 GUI 主循环
     app = WebServerGUI()
     app.run()
 
