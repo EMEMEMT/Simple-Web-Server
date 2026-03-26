@@ -20,7 +20,10 @@ SERVER_NAME = 'Simple-Web-Server/1.0 (Python)'
 # HTTP 状态码及描述
 STATUS_CODES = {
     200: 'OK',
+    400: 'Bad Request',
+    403: 'Forbidden',
     404: 'Not Found',
+    500: 'Internal Server Error',
     501: 'Not Implemented'
 }
 

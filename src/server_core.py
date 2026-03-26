@@ -5,10 +5,10 @@ TCP Socket 监听与多线程调度中心
 """
 import socket
 import threading
-from src.config import DEFAULT_HOST, DEFAULT_PORT, MAX_CONNECTIONS, BUFFER_SIZE
+from src.config import DEFAULT_HOST, DEFAULT_PORT, MAX_CONNECTIONS, BUFFER_SIZE, MIME_TYPES
 from src.logger import logger
 from src.http_parser import parse_request
-from src.http_response import handle_request
+from src.http_response import handle_request, build_http_response
 
 class WebServer:
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
@@ -90,7 +90,15 @@ class WebServer:
         """
         try:
             # 1. 接收客户端发来的原始请求字节流
-            request_data = client_socket.recv(BUFFER_SIZE)
+            # 为了能解析完整的请求头，读取直到遇到空行（\r\n\r\n）或达到最大大小
+            client_socket.settimeout(2.0)
+            request_data = b""
+            max_request_size = BUFFER_SIZE * 16  # 简单的防御，避免请求头无限增长
+            while b"\r\n\r\n" not in request_data and len(request_data) < max_request_size:
+                chunk = client_socket.recv(BUFFER_SIZE)
+                if not chunk:
+                    break
+                request_data += chunk
             
             if not request_data:
                 logger.debug(f"客户端 {client_address} 关闭了连接")
@@ -101,13 +109,22 @@ class WebServer:
             
             if parsed_req.is_valid:
                 # 3. 根据解析结果，获取响应报文
-                response_data = handle_request(parsed_req.method, parsed_req.url)
+                status_code, response_data = handle_request(parsed_req.method, parsed_req.url)
                 
                 # 4. 将响应数据通过 Socket 发送回客户端
                 client_socket.sendall(response_data)
-                logger.info(f"已响应 {client_address} 请求的 {parsed_req.url}")
+                logger.info(
+                    f"ACCESS client={client_address[0]} url={parsed_req.url} status={status_code}"
+                )
             else:
-                logger.warning(f"接收到无效的 HTTP 请求来自 {client_address}")
+                url_display = parsed_req.url if parsed_req.url else "-"
+                logger.warning(f"接收到无效的 HTTP 请求来自 {client_address}: {url_display}")
+
+                # 向客户端返回一个明确的 400，避免客户端等待超时
+                error_msg = "<h1>400 Bad Request</h1><p>Bad Request.</p>"
+                response_data = build_http_response(400, error_msg.encode("utf-8"), MIME_TYPES[".html"])
+                client_socket.sendall(response_data)
+                logger.info(f"ACCESS client={client_address[0]} url={url_display} status=400")
 
         except ConnectionResetError:
             logger.warning(f"客户端 {client_address} 强制断开了连接")

@@ -43,17 +43,25 @@ def build_http_response(status_code: int, content: bytes, mime_type: str) -> byt
     full_response = response_line.encode('utf-8') + header_block.encode('utf-8') + content
     return full_response
 
-def handle_request(method: str, url: str) -> bytes:
+def handle_request(method: str, url: str):
     """
     处理客户端请求，读取文件并返回构造好的响应流
     :param method: 请求方法 (GET, POST等)
     :param url: 请求的路径 (如 /index.html)
+    :return: (status_code, response_bytes)
     """
+    # NOTE:
+    # 为了让上层能够在访问日志中打印响应状态码，这里返回 (status_code, response_bytes)
+    # 而不是只返回 bytes。
+    #
+    # （保持对外部调用的最小改动：仅 `src/server_core.py` 会用到返回值）
+
     # 1. 处理非 GET 请求 (对应任务书：若请求方法不是GET，返回 501)
     if method != 'GET':
         logger.warning(f"不支持的请求方法: {method}")
         error_msg = "<h1>501 Not Implemented</h1><p>The requested method is not supported by this server.</p>"
-        return build_http_response(501, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        response = build_http_response(501, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        return 501, response
 
     # 2. 处理 URL 路径映射
     if url == '/':
@@ -64,13 +72,16 @@ def handle_request(method: str, url: str) -> bytes:
     
     # 构建本地绝对路径
     # 注意：在 Windows 上路径分隔符是 \，URL 里是 /，需要做转换
-    local_path = os.path.join(WEB_ROOT, url.lstrip('/'))
+    web_root_abs = os.path.abspath(WEB_ROOT)
+    local_path = os.path.abspath(os.path.join(web_root_abs, url.lstrip('/')))
+
     # 安全防护：防止路径穿越攻击 (Directory Traversal) 比如请求 /../../../etc/password
-    local_path = os.path.abspath(local_path)
-    if not local_path.startswith(os.path.abspath(WEB_ROOT)):
+    # 使用 "前缀 + 分隔符" 避免像 C:\\webroot2 这样的前缀误匹配。
+    if not (local_path == web_root_abs or local_path.startswith(web_root_abs + os.sep)):
         logger.warning(f"检测到非法路径访问尝试: {url}")
         error_msg = "<h1>403 Forbidden</h1>"
-        return build_http_response(403, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        response = build_http_response(403, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        return 403, response
 
     # 3. 尝试读取文件
     try:
@@ -78,7 +89,8 @@ def handle_request(method: str, url: str) -> bytes:
             content = f.read()
             mime_type = get_mime_type(local_path)
             logger.info(f"200 OK: 成功读取文件 {local_path} ({mime_type})")
-            return build_http_response(200, content, mime_type)
+            response = build_http_response(200, content, mime_type)
+            return 200, response
             
     except FileNotFoundError:
         # 对应任务书：文件不存在返回 404
@@ -87,13 +99,16 @@ def handle_request(method: str, url: str) -> bytes:
         custom_404_path = os.path.join(WEB_ROOT, '404.html')
         if os.path.exists(custom_404_path):
             with open(custom_404_path, 'rb') as f:
-                return build_http_response(404, f.read(), MIME_TYPES['.html'])
+                response = build_http_response(404, f.read(), MIME_TYPES['.html'])
+                return 404, response
         else:
             # 如果没有自定义页面，返回默认字符串
             fallback_msg = "<h1>404 Not Found</h1><p>The requested URL was not found on this server.</p>"
-            return build_http_response(404, fallback_msg.encode('utf-8'), MIME_TYPES['.html'])
+            response = build_http_response(404, fallback_msg.encode('utf-8'), MIME_TYPES['.html'])
+            return 404, response
             
     except Exception as e:
         logger.error(f"读取文件发生服务器内部错误: {e}")
         error_msg = "<h1>500 Internal Server Error</h1>"
-        return build_http_response(500, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        response = build_http_response(500, error_msg.encode('utf-8'), MIME_TYPES['.html'])
+        return 500, response
