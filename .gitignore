@@ -11,6 +11,9 @@ venv/
 # 访问日志
 logs/*.log
 
+webroot/*.png
+webroot/*.mp4
+
 # 系统级文件
 .DS_Store
 Thumbs.db
