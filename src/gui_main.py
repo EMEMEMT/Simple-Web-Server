@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Web 服务器图形用户界面 (GUI)
-负责展示控制面板、接收用户配置、控制后台服务器启停，并安全地实时展示日志。
-"""
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
 import threading
@@ -13,10 +9,6 @@ from src.config import DEFAULT_PORT
 from src.logger import logger
 
 class QueueLogHandler(logging.Handler):
-    """
-    自定义的日志处理器 (Handler)。
-    作用：拦截系统的日志输出，将其放入一个线程安全的队列中，供前端 GUI 消费。
-    """
     def __init__(self, log_queue):
         super().__init__()
         self.log_queue = log_queue
@@ -37,7 +29,7 @@ class WebServerGUI:
         # 拦截窗口关闭事件，确保安全退出
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        # 核心：用于跨线程安全通信的消息队列
+        # 用于跨线程安全通信的消息队列
         self.log_queue = queue.Queue()
         self.setup_logging_queue()
 
@@ -58,7 +50,7 @@ class WebServerGUI:
 
     def create_widgets(self):
         """创建界面组件"""
-        # ================= 控制区 (Top Frame) =================
+        # 控制区
         control_frame = tk.Frame(self.root)
         control_frame.pack(fill=tk.X, pady=(0, 10))
 
@@ -80,7 +72,7 @@ class WebServerGUI:
         self.status_label = tk.Label(control_frame, text="已停止", fg="red", font=("Arial", 11, "bold"))
         self.status_label.pack(side=tk.LEFT)
 
-        # ================= 日志区 (Bottom Frame) =================
+        # 日志区
         log_frame = tk.Frame(self.root)
         log_frame.pack(fill=tk.BOTH, expand=True)
         

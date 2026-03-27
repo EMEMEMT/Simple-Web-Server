@@ -1,51 +1,39 @@
-/* webroot/style.css */
+/* webroot/style.css - 极简/原生风格 */
 * {
     box-sizing: border-box;
 }
 
 body {
-    /* 使用系统默认无衬线字体，显得干净专业 */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #f5f6fa;
+    /* 移除所有自定义字体、背景色和文字颜色，使用浏览器默认 */
     margin: 0;
     padding: 0;
-    color: #2f3640;
     line-height: 1.6;
 }
 
 /* 顶部导航栏 */
 .navbar {
-    background-color: #2f3640;
+    /* 移除背景色和阴影 */
     padding: 15px 0;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .navbar a {
-    color: #f5f6fa;
-    text-decoration: none;
+    /* 移除自定义颜色，恢复默认超链接样式 */
     margin: 0 20px;
     font-size: 16px;
-    transition: color 0.2s;
-}
-
-.navbar a:hover {
-    color: #00a8ff;
+    text-decoration: underline;
 }
 
 /* 主体内容容器 */
 .container {
     max-width: 800px;
     margin: 40px auto;
-    background: #ffffff;
     padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    /* 移除背景色、圆角和阴影 */
 }
 
 h1, h2 {
-    color: #2f3640;
-    border-bottom: 2px solid #f5f6fa;
+    /* 移除自定义颜色和底边框 */
     padding-bottom: 10px;
     margin-top: 0;
 }
@@ -61,20 +49,7 @@ h1, h2 {
 .nav-btn {
     display: block;
     padding: 15px 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #dcdde1;
-    color: #2f3640;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.2s;
-}
-
-.nav-btn:hover {
-    background-color: #00a8ff;
-    color: #ffffff;
-    border-color: #00a8ff;
-    transform: translateY(-2px);
+    text-decoration: underline; 
 }
 
 /* 媒体展示区 */
@@ -82,25 +57,17 @@ h1, h2 {
     text-align: center;
     margin-top: 20px;
     padding: 20px;
-    background: #f8f9fa;
-    border: 1px dashed #dcdde1;
-    border-radius: 6px;
+    /* 移除背景色和虚线边框 */
 }
 
 img, video {
     max-width: 100%;
     height: auto;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* 移除圆角和阴影 */
 }
 
 .back-link {
     display: inline-block;
     margin-top: 30px;
-    color: #00a8ff;
-    text-decoration: none;
-}
-
-.back-link:hover {
     text-decoration: underline;
 }
